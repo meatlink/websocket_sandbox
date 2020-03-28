@@ -1,0 +1,48 @@
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: ws-app
+  name: ws-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ws-app
+  template:
+    metadata:
+      labels:
+        app: ws-app
+    spec:
+      containers:
+      - name: ws-app
+        image: localhost:5000/ws-app
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: ws-app
+  name: ws-app
+spec:
+  ports:
+  - port: 80
+    protocol: TCP
+    targetPort: 8080
+  selector:
+    app: ws-app
+
+---
+
+apiVersion: networking.k8s.io/v1beta1
+kind: Ingress
+metadata:
+  name: ws-app
+spec:
+  backend:
+    serviceName: ws-app
+    servicePort: 80
