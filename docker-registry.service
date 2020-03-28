@@ -1,0 +1,9 @@
+[Unit]
+Description=Adhoc docker registry for testing
+
+[Service]
+ExecStart=/usr/bin/docker run --rm -v registry:/var/lib/registry -p 5000:5000 --name registry registry
+ExecStop=/usr/bin/docker stop registry
+
+[Install]
+WantedBy=multi-user.target

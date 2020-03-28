@@ -28,6 +28,10 @@ service nginx restart
 curl -fsSL https://get.docker.com -o get-docker.sh
 sh get-docker.sh
 
+ln -s "$(pwd)/docker-registry.service" /etc/systemd/system/
+systemctl enable docker-registry.service
+systemctl start docker-registry.service
+
 cat > /etc/sysctl.d/k8s.conf <<EOF
 net.bridge.bridge-nf-call-ip6tables = 1
 net.bridge.bridge-nf-call-iptables = 1
@@ -48,5 +52,4 @@ cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
 chown $(id -u):$(id -g) $HOME/.kube/config
 kubectl taint node ubuntu-bionic node-role.kubernetes.io/master:NoSchedule-
 kubectl apply -f "https://cloud.weave.works/k8s/net?k8s-version=$(kubectl version | base64 | tr -d '\n')"
-
 
